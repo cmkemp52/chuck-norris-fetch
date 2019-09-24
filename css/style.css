@@ -57,3 +57,13 @@ button {
     padding: 1rem;
     text-transform: uppercase;
 }
+
+.hero {
+    height: calc(100% * 56.5);
+    width: 100%;
+}
+
+.quote {
+    font-size: 1.6rem;
+    margin: 1rem 0 2rem;
+}

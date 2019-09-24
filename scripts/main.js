@@ -1,20 +1,31 @@
 "use strict";
+const chuckQuotesForm = document.querySelector("#chuckQuotesForm");
 
-const getMoreQuotesButton = document.getElementById("getMoreQuotes");
-const chuckSays = document.getElementById("chuckSays")
-const chuckImage = document.getElementById("chuckImage")
-
-// Add an event listener to the button, DON'T FORGET TO PREVENT THE DEFAULT BEHAVIOR!
-// Call a function to return a new quote, and update the DOM
-getMoreQuotesButton.addEventListener("click", function(e) {
-    console.log("Butpress");
-    updateChuckSays("dev");
-});
+chuckQuotesForm.addEventListener("submit",function(event){
+    event.preventDefault();
+    const categoryValue = chuckQuotesForm.querySelector("select").value;
+    updateChuckSays(categoryValue);
+})
 
 // Create a function to update the quote text in the DOM
 function updateChuckSays(category) {
     get(`https://api.chucknorris.io/jokes/random?category=${category}`)
-        .then((quote) => {chuckSays.innerHTML = quote;});
+        .then((quote) => {chuckSays.innerHTML = quote.value;});
     chuckSays.innerHTML = "..."
 }
-updateChuckSays("food");
+function getCategories(){
+    const selectWrapper = document.querySelector("#selectWrapper");
+    const categoryList = document.createElement("select");
+    get("https://api.chucknorris.io/jokes/categories")
+        .then(response => response.forEach(function(category){
+            const categoryOption = document.createElement("option")
+            categoryOption.text = category;
+            categoryOption.value = category;
+            categoryList.append(categoryOption);
+        }))
+    selectWrapper.append(categoryList);
+}
+//IIFE
+{const defaultCategory = "dev";
+getCategories();
+updateChuckSays(defaultCategory);};
